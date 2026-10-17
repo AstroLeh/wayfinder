@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f1e8">
+  <meta name="description" content="WAYFINDER — mapa Twojej drogi do celu.">
+  <title>WAYFINDER — Twoja droga</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="Nawigacja główna">
+      <a class="brand" href="#mapa" aria-label="WAYFINDER — strona główna">
+        <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="M7 24 16 7l9 17M11 18h10M16 7v18"/></svg></span>
+        <span class="brand-name">wayfinder<span>your own way</span></span>
+      </a>
+      <div class="side-label">TWOJA PRZESTRZEŃ</div>
+      <nav class="main-nav">
+        <button class="nav-item active" data-view="mapa"><svg viewBox="0 0 24 24"><path d="m3 6 6-3 6 3 6-3v15l-6 3-6-3-6 3zM9 3v15m6-12v15"/></svg><span>Moja mapa</span></button>
+        <button class="nav-item" data-view="dziennik"><svg viewBox="0 0 24 24"><path d="M5 4.5A2.5 2.5 0 0 1 7.5 2H20v17H7.5A2.5 2.5 0 0 0 5 21.5zm0 0v17M9 7h7m-7 4h7"/></svg><span>Dziennik</span><span class="nav-count" id="journal-count">0</span></button>
+        <button class="nav-item" data-view="wspomnienia"><svg viewBox="0 0 24 24"><path d="M20 12.5 12 20l-8-7.5a5 5 0 0 1 7-7L12 6l1-1a5 5 0 0 1 7 7.5ZM8 12h2l1.5-3 2.5 6 1.5-3H18"/></svg><span>Wspomnienia</span></button>
+      </nav>
+      <div class="sidebar-spacer"></div>
+      <div class="side-quote"><span class="quote-mark">“</span><p>Nie musisz być na szczycie, żeby docenić drogę.</p><span class="quote-byline">MAŁE KROKI TEŻ SIĘ LICZĄ</span></div>
+      <button class="profile-button" id="profile-button"><span class="avatar">M</span><span class="profile-copy"><strong>Moja podróż</strong><small>jeździectwo</small></span><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></button>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div class="breadcrumb"><span>MOJA PRZESTRZEŃ</span><span class="crumb-slash">/</span><strong id="page-title">MAPA PODRÓŻY</strong></div>
+        <div class="top-actions"><span class="save-status"><span class="save-dot"></span> Zapisano lokalnie</span><button class="icon-button" id="help-button" aria-label="Informacje o prototypie" title="Informacje o prototypie"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.6 9a2.5 2.5 0 1 1 4.7 1.2c-.8 1.1-2.3 1.3-2.3 3m0 3h.01"/></svg></button></div>
+      </header>
+
+      <section class="view active" id="map-view" aria-labelledby="goal-title">
+        <div class="page-heading">
+          <div><div class="eyebrow"><span class="eyebrow-line"></span> TWOJA MAPA, TWOJE TEMPO</div><h1 id="goal-title">Pierwsze zawody <em>w klasie L</em></h1><p class="heading-subtitle">Każdy trening przybliża Cię do celu. Zobacz, jak daleko już zaszłaś.</p></div>
+          <button class="primary-button" id="add-point-button"><svg viewBox="0 0 24 24"><path d="M12 5v14m-7-7h14"/></svg><span>Dodaj punkt</span></button>
+        </div>
+
+        <div class="overview-strip">
+          <div class="overview-item goal-overview"><span class="overview-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11Z"/><path d="m9 12 2 2 4-4"/></svg></span><span><small>NA TWOJEJ DRODZE</small><strong id="milestone-summary">2 z 6 etapów</strong></span></div>
+          <div class="overview-divider"></div>
+          <div class="progress-overview"><div class="progress-copy"><small>JUŻ ZA TOBĄ</small><strong id="progress-label">34%</strong></div><div class="progress-track"><span id="progress-fill"></span></div></div>
+          <div class="overview-divider"></div>
+          <div class="overview-item next-overview"><span class="overview-icon next-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><span><small>NAJBLIŻSZY KROK</small><strong id="next-step">Pierwszy przejazd treningowy</strong></span></div>
+        </div>
+
+        <div class="workspace-grid">
+          <section class="map-section" aria-label="Interaktywna mapa drogi do celu">
+            <div class="map-toolbar"><div class="map-label"><span class="map-label-dot"></span><span>TRASA DO TWOJEGO CELU</span></div><div class="map-tools"><span class="map-legend"><i class="legend-done"></i>za Tobą</span><span class="map-legend"><i class="legend-next"></i>przed Tobą</span><button class="map-fit" id="map-fit" aria-label="Pokaż całą trasę" title="Pokaż całą trasę"><svg viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3m13-5h3a2 2 0 0 1 2 2v3M3 16v3a2 2 0 0 0 2 2h3m13-5v3a2 2 0 0 1-2 2h-3"/></svg></button></div></div>
+            <div class="map-canvas" id="map-canvas"><svg class="journey-map" id="journey-map" viewBox="0 0 900 520" role="img" aria-label="Mapa etapów Twojej drogi"></svg><div class="map-compass" aria-hidden="true"><span>N</span><svg viewBox="0 0 24 36"><path d="M12 1 4 19l8-4 8 4z"/><path d="m12 35 8-16-8 4-8-4z"/></svg></div><div class="map-scale" aria-hidden="true"><span></span> TWOJA DROGA</div></div>
+            <div class="map-footer"><span><svg viewBox="0 0 24 24"><path d="M12 21s7-5.5 7-12a7 7 0 0 0-14 0c0 6.5 7 12 7 12Z"/><circle cx="12" cy="9" r="2"/></svg><span id="map-node-count">6 punktów na trasie</span></span><span class="map-footer-note">Kliknij punkt, żeby zobaczyć szczegóły</span></div>
+          </section>
+
+          <aside class="detail-section" aria-label="Szczegóły wybranego punktu">
+            <div class="detail-topline"><span class="detail-kicker">WYBRANY PUNKT</span><button class="more-button" id="edit-point-button" aria-label="Edytuj wybrany punkt" title="Edytuj wybrany punkt"><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></svg></button></div>
+            <div id="selected-detail"></div>
+            <div class="detail-divider"></div>
+            <div class="route-list-heading"><div><span class="detail-kicker">ETAPY PODRÓŻY</span><span class="route-count" id="route-count">06</span></div><button class="text-button" id="show-all-button">Zobacz wszystkie</button></div>
+            <div class="route-list" id="route-list"></div>
+          </aside>
+        </div>
+
+        <section class="reflection-strip"><div class="reflection-icon"><svg viewBox="0 0 24 24"><path d="M12 3v2m0 14v2M3 12h2m14 0h2M5.6 5.6 7 7m10 10 1.4 1.4m0-12.8L17 7M7 17l-1.4 1.4"/><circle cx="12" cy="12" r="4"/></svg></div><div class="reflection-copy"><strong>Dziś nie musisz zrobić wszystkiego.</strong><span>Wystarczy, że zrobisz kolejny mały krok.</span></div><button class="reflection-action" id="add-activity-button">Zapisz trening <svg viewBox="0 0 24 24"><path d="M5 12h14m-7-7 7 7-7 7"/></svg></button></section>
+      </section>
+
+      <section class="view journal-view" id="journal-view" aria-labelledby="journal-title">
+        <div class="page-heading journal-heading"><div><div class="eyebrow"><span class="eyebrow-line"></span> MAŁE CHWILE, WIELKA DROGA</div><h1 id="journal-title">Dziennik <em>podróży</em></h1><p class="heading-subtitle">Zapisuj to, co chcesz pamiętać. Każdy wpis jest częścią Twojej historii.</p></div><button class="primary-button" id="journal-add-button"><svg viewBox="0 0 24 24"><path d="M12 5v14m-7-7h14"/></svg><span>Nowy wpis</span></button></div>
+        <div class="journal-summary"><div><span class="journal-summary-number" id="journal-total">0</span><span>zapisanych chwil</span></div><div class="journal-summary-rule"></div><p>„To, co dziś wydaje się małe, jutro może być Twoim ulubionym wspomnieniem.”</p></div>
+        <div class="journal-filters" role="group" aria-label="Filtruj wpisy"><button class="filter-button active" data-filter="all">Wszystkie <span id="filter-all-count">0</span></button><button class="filter-button" data-filter="activity">Treningi</button><button class="filter-button" data-filter="memory">Wspomnienia</button></div>
+        <div class="journal-grid" id="journal-grid"></div>
+      </section>
+
+      <section class="view memories-view" id="memories-view" aria-labelledby="memories-title">
+        <div class="page-heading"><div><div class="eyebrow"><span class="eyebrow-line"></span> TWOJA HISTORIA</div><h1 id="memories-title">Wspomnienia <em>po drodze</em></h1><p class="heading-subtitle">Chwile, do których warto wrócić.</p></div><button class="primary-button" id="memory-add-button"><svg viewBox="0 0 24 24"><path d="M12 5v14m-7-7h14"/></svg><span>Dodaj wspomnienie</span></button></div>
+        <div class="memory-feature" id="memory-feature"></div>
+      </section>
+
+      <footer class="app-footer"><span>WAYFINDER <i>·</i> TWOJA DROGA, TWOJE TEMPO</span><span>Wszystkie dane pozostają na tym urządzeniu</span></footer>
+    </main>
+  </div>
+
+  <dialog class="entry-dialog" id="entry-dialog">
+    <form id="entry-form" method="dialog">
+      <div class="dialog-top"><div><span class="detail-kicker" id="dialog-kicker">NOWY WPIS</span><h2 id="dialog-title">Zapisz tę chwilę</h2></div><button class="icon-button dialog-close" type="button" data-close-dialog aria-label="Zamknij"><svg viewBox="0 0 24 24"><path d="m18 6-12 12M6 6l12 12"/></svg></button></div>
+      <input type="hidden" id="entry-type" value="activity"><input type="hidden" id="entry-id">
+      <label class="field-label" for="entry-title">Jak nazwiesz ten krok?</label><input class="text-input" id="entry-title-input" name="title" maxlength="72" required placeholder="np. Trening skokowy">
+      <label class="field-label" for="entry-description">Kilka słów dla siebie <span>(opcjonalnie)</span></label><textarea class="text-input text-area" id="entry-description" name="description" maxlength="400" placeholder="Co poszło dobrze? Co chcesz zapamiętać?"></textarea>
+      <div class="form-row"><div><label class="field-label" for="entry-date-input">Kiedy?</label><input class="text-input" id="entry-date-input" name="date" type="date" required></div><div id="mood-field"><label class="field-label" for="entry-mood">Jak się czujesz?</label><select class="text-input" id="entry-mood" name="mood"><option value="spokojnie">Spokojnie</option><option value="dumnie">Dumnie</option><option value="podekscytowana">Podekscytowana</option><option value="refleksyjnie">Refleksyjnie</option></select></div></div>
+      <div class="dialog-actions"><button class="secondary-button" type="button" data-close-dialog>Anuluj</button><button class="primary-button" id="submit-entry" type="submit"><svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg><span>Zapisz wpis</span></button></div>
+    </form>
+  </dialog>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
