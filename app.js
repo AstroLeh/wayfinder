@@ -282,7 +282,7 @@ function renderAll() {
   const activeMap = getActiveMap();
   if (activeMap) {
     $('#goal-title').textContent = activeMap.name;
-    $('#goal-subtitle').textContent = activeMap.goal;
+      $('#goal-subtitle').textContent = activeMap.goal;
     $('#profile-name').textContent = activeMap.name;
     $('#profile-category').textContent = activeMap.category;
   }
@@ -423,9 +423,9 @@ $('#map-view').addEventListener('click', (event) => {
   renderRouteList();
 });
 $('#journey-map').addEventListener('keydown', (event) => {
-  if (event.key !== 'Enter' && event.key !== ' ') return;
   const node = event.target.closest('[data-point]');
   if (!node) return;
+  if (event.key !== 'Enter' && event.key !== ' ') return;
   event.preventDefault();
   node.dispatchEvent(new MouseEvent('click', { bubbles: true }));
 });
@@ -475,4 +475,5 @@ $$('.filter-button').forEach((button) => button.addEventListener('click', () => 
   activeFilter = button.dataset.filter;
   renderJournal();
 }));
-showScreen(state.screen ?? 'welcome');
+const startScreen = window.matchMedia('(max-width:760px)').matches ? 'welcome' : state.screen ?? 'welcome';
+showScreen(startScreen);
