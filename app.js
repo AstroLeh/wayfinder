@@ -475,8 +475,4 @@ $$('.filter-button').forEach((button) => button.addEventListener('click', () => 
   activeFilter = button.dataset.filter;
   renderJournal();
 }));
-const isMobileExperience = window.matchMedia('(max-width:760px)').matches
-  || window.matchMedia('(max-width:1024px) and (hover: none) and (pointer: coarse)').matches
-  || /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
-const startScreen = isMobileExperience ? 'welcome' : state.screen ?? 'welcome';
-showScreen(startScreen);
+showScreen('welcome');
