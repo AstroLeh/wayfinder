@@ -411,3 +411,6 @@ h1 em{color:#c6a6f1}
   .welcome-bottom{bottom:calc(18px + env(safe-area-inset-bottom))}
 }
 @media(prefers-reduced-motion:reduce){.welcome-content,.map-choice-card{animation:none}}
+
+#map-view h1,#map-view .detail-title,#map-view .reflection-copy strong{font-family:'Cormorant Garamond',Georgia,serif;font-weight:500;color:#f2eaf0}
+#map-view h1 em{color:#d7bfdc}
