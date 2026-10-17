@@ -6,7 +6,11 @@ const dateOffset = (days) => {
   return date.toISOString().slice(0, 10);
 };
 
-const starterData = {
+const horseMap = {
+  id: 'horse',
+  name: 'Pierwsze zawody w klasie L',
+  category: 'Jeździectwo',
+  goal: 'Przygotuj się do swojego pierwszego startu w klasie L.',
   selectedId: 'rytm',
   milestones: [
     { id: 'fundamenty', title: 'Spokojne fundamenty', category: 'Fundament', description: 'Regularność i pewność w siodle. Zbudowałaś rytm, który daje Ci solidną bazę.', date: dateOffset(-72), status: 'done', x: 100, y: 382 },
@@ -21,6 +25,15 @@ const starterData = {
     { id: 'entry-2', type: 'memory', title: 'Poranek w stajni', description: 'Zapach siana, cisza przed treningiem i chwila tylko dla siebie.', date: dateOffset(-7), mood: 'spokojnie' },
     { id: 'entry-3', type: 'activity', title: 'Trening równowagi', description: 'Lepiej czuję tempo. Następnym razem popracuję nad płynnymi najazdami.', date: dateOffset(-10), mood: 'refleksyjnie' }
   ]
+};
+
+const starterData = {
+  screen: 'welcome',
+  activeMapId: null,
+  maps: [horseMap],
+  selectedId: horseMap.selectedId,
+  milestones: structuredClone(horseMap.milestones),
+  entries: structuredClone(horseMap.entries)
 };
 
 let state = loadState();
@@ -40,7 +53,28 @@ const svgIcon = (name) => {
 function loadState() {
   try {
     const stored = JSON.parse(localStorage.getItem(STORAGE_KEY));
-    if (stored?.milestones && stored?.entries) return stored;
+    if (Array.isArray(stored?.maps) && stored.maps.length) {
+      const activeMap = stored.maps.find((map) => map.id === stored.activeMapId);
+      return {
+        ...structuredClone(starterData),
+        ...stored,
+        selectedId: activeMap?.selectedId ?? stored.selectedId,
+        milestones: activeMap?.milestones ?? stored.milestones ?? [],
+        entries: activeMap?.entries ?? stored.entries ?? []
+      };
+    }
+    if (stored?.milestones && stored?.entries) {
+      const migratedMap = { ...structuredClone(horseMap), ...stored, id: 'horse' };
+      return {
+        ...structuredClone(starterData),
+        screen: 'welcome',
+        activeMapId: null,
+        maps: [migratedMap],
+        selectedId: migratedMap.selectedId,
+        milestones: migratedMap.milestones,
+        entries: migratedMap.entries
+      };
+    }
   } catch (error) {
     console.warn('Nie udało się odczytać lokalnego zapisu WAYFINDER.', error);
   }
@@ -49,12 +83,100 @@ function loadState() {
 
 function saveState() {
   try {
+    const activeMap = state.maps.find((map) => map.id === state.activeMapId);
+    if (activeMap) {
+      activeMap.selectedId = state.selectedId;
+      activeMap.milestones = state.milestones;
+      activeMap.entries = state.entries;
+    }
     localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
   } catch (error) {
     showToast('Nie udało się zapisać zmian w tej przeglądarce.');
     console.error(error);
   }
   $('#save-status')?.classList.add('saved');
+}
+
+function getActiveMap() {
+  return state.maps.find((map) => map.id === state.activeMapId) ?? null;
+}
+
+function renderMapPicker() {
+  const choices = $('#map-choices');
+  if (!choices) return;
+  const mapCards = state.maps.map((map) => {
+    const completed = map.milestones.filter((point) => point.status === 'done').length;
+    const progress = Math.round((completed / Math.max(map.milestones.length, 1)) * 100);
+    const nextStep = map.milestones.find((point) => point.status === 'upcoming')?.title ?? 'Właśnie dotarłaś do celu';
+    return `<article class="map-choice-card ${map.id === 'horse' ? 'horse-map-card' : ''}">
+      <div class="map-choice-art ${map.id === 'horse' ? 'horse-map-art' : ''}">
+        <svg viewBox="0 0 520 230" aria-hidden="true"><path class="mini-route-shadow" d="M45 180Q130 154 189 126T329 84T474 40"/><path class="mini-route" d="M45 180Q130 154 189 126T329 84T474 40"/><circle cx="45" cy="180" r="5"/><circle cx="189" cy="126" r="5"/><circle cx="329" cy="84" r="5"/><circle cx="474" cy="40" r="6"/></svg>
+        <span class="map-art-category">${escapeHtml(map.category)}</span><span class="map-art-count">${map.milestones.length} ETAPÓW</span>
+        <span class="map-art-next">${escapeHtml(nextStep)}</span>
+      </div>
+      <div class="map-choice-copy"><div><h2>${escapeHtml(map.name)}</h2><p>${escapeHtml(map.goal)}</p></div><div class="map-choice-progress"><div class="map-choice-progress-label"><span>${completed} z ${map.milestones.length} etapów za Tobą</span><strong>${progress}%</strong></div><span class="map-choice-progress-track"><i style="width:${progress}%"></i></span></div><button class="map-open-button" type="button" data-open-map="${escapeHtml(map.id)}">Otwórz mapę <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-7-7 7 7-7 7"/></svg></button></div>
+    </article>`;
+  }).join('');
+  choices.innerHTML = `${mapCards}<button class="map-create-card" id="add-map-button" type="button"><span class="map-create-mark"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14m-7-7h14"/></svg></span><strong>Stwórz nową mapę</strong><span>Wybierz cel, a potem ułóż swoją drogę.</span></button>`;
+  $('#library-back-button').hidden = !state.activeMapId;
+}
+
+function showScreen(screen) {
+  if (screen === 'dashboard' && !getActiveMap()) screen = 'library';
+  state.screen = screen;
+  $('#welcome-screen').classList.toggle('active', screen === 'welcome');
+  $('#map-library-screen').classList.toggle('active', screen === 'library');
+  $('#app-shell').classList.toggle('active', screen === 'dashboard');
+  if (screen === 'library') renderMapPicker();
+  if (screen === 'dashboard') renderAll();
+  saveState();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function openMap(id) {
+  const map = state.maps.find((item) => item.id === id);
+  if (!map) return;
+  state.activeMapId = map.id;
+  state.selectedId = map.selectedId;
+  state.milestones = map.milestones;
+  state.entries = map.entries;
+  showScreen('dashboard');
+}
+
+function createMap(name, category, goal) {
+  const id = `map-${crypto.randomUUID()}`;
+  const makePoint = (title, pointCategory, description, date, status, x, y, suffix) => ({
+    id: `${id}-${suffix}`,
+    title,
+    category: pointCategory,
+    description,
+    date,
+    status,
+    x,
+    y
+  });
+  const map = {
+    id,
+    name,
+    category,
+    goal,
+    selectedId: `${id}-step-1`,
+    milestones: [
+      makePoint('Pierwszy mały krok', 'Początek', goal, dateOffset(0), 'current', 100, 382, 'step-1'),
+      makePoint('Znajdź swój rytm', 'Praktyka', 'Poznaj swoje tempo i sprawdź, co pomaga Ci iść dalej.', dateOffset(14), 'upcoming', 310, 264, 'step-2'),
+      makePoint('Pierwsze wyzwanie', 'Ważny moment', 'Zauważ, czego nauczyła Cię droga do tego miejsca.', dateOffset(30), 'upcoming', 545, 315, 'step-3'),
+      makePoint('Twój cel', 'Cel', goal, dateOffset(60), 'upcoming', 820, 154, 'step-4')
+    ],
+    entries: []
+  };
+  state.maps.push(map);
+  state.activeMapId = map.id;
+  state.selectedId = map.selectedId;
+  state.milestones = map.milestones;
+  state.entries = map.entries;
+  $('#map-dialog').close();
+  showScreen('dashboard');
+  showToast('Twoja nowa mapa jest gotowa.');
 }
 
 function formatDate(value, options = { day: 'numeric', month: 'short' }) {
@@ -157,6 +279,13 @@ function renderMemories() {
 }
 
 function renderAll() {
+  const activeMap = getActiveMap();
+  if (activeMap) {
+    $('#goal-title').textContent = activeMap.name;
+    $('#goal-subtitle').textContent = activeMap.goal;
+    $('#profile-name').textContent = activeMap.name;
+    $('#profile-category').textContent = activeMap.category;
+  }
   renderOverview();
   renderMap();
   renderDetail();
@@ -263,6 +392,14 @@ function switchView(viewName) {
   $('#page-title').textContent = viewName === 'mapa' ? 'MAPA PODRÓŻY' : viewName === 'dziennik' ? 'DZIENNIK PODRÓŻY' : 'WSPOMNIENIA';
 }
 
+function handleMapCreate(event) {
+  event.preventDefault();
+  const form = event.currentTarget;
+  if (!form.reportValidity()) return;
+  createMap($('#map-name-input').value.trim(), $('#map-category-input').value, $('#map-goal-input').value.trim());
+  form.reset();
+}
+
 function escapeHtml(value = '') {
   return String(value).replace(/[&<>"']/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[character]);
 }
@@ -302,9 +439,25 @@ $('#route-list').addEventListener('click', (event) => {
 });
 $$('.nav-item').forEach((button) => button.addEventListener('click', () => switchView(button.dataset.view)));
 $('#entry-form').addEventListener('submit', handleEntrySubmit);
+$('#map-form').addEventListener('submit', handleMapCreate);
 $$('[data-close-dialog]').forEach((button) => button.addEventListener('click', () => $('#entry-dialog').close()));
+$$('[data-close-map-dialog]').forEach((button) => button.addEventListener('click', () => $('#map-dialog').close()));
 $('#entry-dialog').addEventListener('click', (event) => {
   if (event.target === $('#entry-dialog')) $('#entry-dialog').close();
+});
+$('#map-dialog').addEventListener('click', (event) => {
+  if (event.target === $('#map-dialog')) $('#map-dialog').close();
+});
+$('#begin-button').addEventListener('click', () => showScreen('library'));
+$('#library-back-button').addEventListener('click', () => showScreen(state.activeMapId ? 'dashboard' : 'welcome'));
+$('#maps-library-button').addEventListener('click', () => showScreen('library'));
+$('#map-choices').addEventListener('click', (event) => {
+  const openButton = event.target.closest('[data-open-map]');
+  if (openButton) {
+    openMap(openButton.dataset.openMap);
+    return;
+  }
+  if (event.target.closest('#add-map-button')) $('#map-dialog').showModal();
 });
 $('#add-point-button').addEventListener('click', addMilestone);
 $('#edit-point-button').addEventListener('click', editSelectedPoint);
@@ -322,4 +475,4 @@ $$('.filter-button').forEach((button) => button.addEventListener('click', () => 
   activeFilter = button.dataset.filter;
   renderJournal();
 }));
-renderAll();
+showScreen(state.screen ?? 'welcome');

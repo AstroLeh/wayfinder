@@ -10,11 +10,29 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="dreamy.css">
+  <link rel="stylesheet" href="dreamy.css?v=welcome-maps-2">
   <script src="app.js" defer></script>
 </head>
 <body>
-  <div class="app-shell">
+  <section class="welcome-screen screen-view active" id="welcome-screen" aria-labelledby="welcome-title">
+    <img class="welcome-image" src="https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=2000&q=90" alt="Górski szczyt wyłaniający się z mgły nad jeziorem" fetchpriority="high">
+    <div class="welcome-wash" aria-hidden="true"></div>
+    <div class="welcome-top"><a class="welcome-wordmark" href="#welcome-title">WAYFINDER<span>YOUR OWN WAY</span></a><span class="welcome-top-note">A SPACE TO FIND YOUR WAY</span></div>
+    <div class="welcome-celestial" aria-hidden="true">
+      <svg viewBox="0 0 720 330" preserveAspectRatio="none"><path class="celestial-arc" d="M40 290 Q360 4 680 290"/><circle class="arc-star" cx="130" cy="210" r="3"/><circle class="arc-star" cx="278" cy="100" r="2.5"/><circle class="arc-star" cx="440" cy="87" r="3"/><circle class="arc-star" cx="595" cy="190" r="2.5"/><circle class="arc-phase phase-crescent" cx="130" cy="210" r="11"/><circle class="arc-phase phase-half" cx="278" cy="100" r="12"/><circle class="arc-phase phase-full" cx="360" cy="68" r="14"/><circle class="arc-phase phase-half" cx="440" cy="100" r="12"/><circle class="arc-phase phase-crescent" cx="595" cy="190" r="11"/></svg>
+      <span class="welcome-moon"></span><span class="welcome-star star-one">✦</span><span class="welcome-star star-two">·</span><span class="welcome-star star-three">✧</span>
+    </div>
+    <div class="welcome-content"><span class="welcome-eyebrow"><i></i> KAŻDA DROGA JEST INNA</span><h1 id="welcome-title">Każda podróż zaczyna się od kroku,<br><em>zaplanujmy tą podróż razem.</em></h1><button class="welcome-cta" id="begin-button">Zaczynajmy <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-7-7 7 7-7 7"/></svg></button></div>
+    <div class="welcome-bottom"><span>WAYFINDER</span><span class="welcome-bottom-rule"></span><span>TWOJA DROGA, TWOJE TEMPO</span></div>
+  </section>
+
+  <section class="map-library-screen screen-view" id="map-library-screen" aria-labelledby="library-title">
+    <header class="library-topbar"><a class="library-wordmark" href="#library-title">WAYFINDER<span>YOUR OWN WAY</span></a><button class="library-back" id="library-back-button" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6M9 12h12"/></svg><span>Wróć do mapy</span></button></header>
+    <main class="library-content"><div class="library-intro"><span class="library-eyebrow"><i></i> TWOJA PRZESTRZEŃ ZACZYNA SIĘ TUTAJ</span><h1 id="library-title">Wybierz swoją <em>mapę</em></h1><p>Możesz zacząć od gotowej drogi albo stworzyć własną, od zera.</p></div><div class="map-choice-grid" id="map-choices" aria-live="polite"></div></main>
+    <footer class="library-footer"><span>✦</span> Każda droga zaczyna się od Ciebie</footer>
+  </section>
+
+  <div class="app-shell" id="app-shell">
     <aside class="sidebar" aria-label="Nawigacja główna">
       <a class="brand" href="#mapa" aria-label="WAYFINDER — strona główna">
         <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="M7 24 16 7l9 17M11 18h10M16 7v18"/></svg></span>
@@ -28,18 +46,18 @@
       </nav>
       <div class="sidebar-spacer"></div>
       <div class="side-quote"><span class="quote-mark">“</span><p>Nie musisz być na szczycie, żeby docenić drogę.</p><span class="quote-byline">MAŁE KROKI TEŻ SIĘ LICZĄ</span></div>
-      <button class="profile-button" id="profile-button"><span class="avatar">M</span><span class="profile-copy"><strong>Moja podróż</strong><small>jeździectwo</small></span><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></button>
+      <button class="profile-button" id="profile-button"><span class="avatar">M</span><span class="profile-copy"><strong id="profile-name">Moja podróż</strong><small id="profile-category">jeździectwo</small></span><svg viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></button>
     </aside>
 
     <main class="main-content">
       <header class="topbar">
         <div class="breadcrumb"><span>MOJA PRZESTRZEŃ</span><span class="crumb-slash">/</span><strong id="page-title">MAPA PODRÓŻY</strong></div>
-        <div class="top-actions"><span class="save-status"><span class="save-dot"></span> Zapisano lokalnie</span><button class="icon-button" id="help-button" aria-label="Informacje o prototypie" title="Informacje o prototypie"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.6 9a2.5 2.5 0 1 1 4.7 1.2c-.8 1.1-2.3 1.3-2.3 3m0 3h.01"/></svg></button></div>
+        <div class="top-actions"><span class="save-status"><span class="save-dot"></span> Zapisano lokalnie</span><button class="icon-button" id="maps-library-button" aria-label="Moje mapy" title="Moje mapy"><svg viewBox="0 0 24 24"><path d="m3 6 6-3 6 3 6-3v15l-6 3-6-3-6 3zM9 3v15m6-12v15"/></svg></button><button class="icon-button" id="help-button" aria-label="Informacje o prototypie" title="Informacje o prototypie"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.6 9a2.5 2.5 0 1 1 4.7 1.2c-.8 1.1-2.3 1.3-2.3 3m0 3h.01"/></svg></button></div>
       </header>
 
       <section class="view active" id="map-view" aria-labelledby="goal-title">
         <div class="page-heading">
-          <div><div class="eyebrow"><span class="eyebrow-line"></span> TWOJA MAPA, TWOJE TEMPO</div><h1 id="goal-title">Pierwsze zawody <em>w klasie L</em></h1><p class="heading-subtitle">Każdy trening przybliża Cię do celu. Zobacz, jak daleko już zaszłaś.</p></div>
+          <div><div class="eyebrow"><span class="eyebrow-line"></span> TWOJA MAPA, TWOJE TEMPO</div><h1 id="goal-title">Pierwsze zawody <em>w klasie L</em></h1><p class="heading-subtitle" id="goal-subtitle">Każdy trening przybliża Cię do celu. Zobacz, jak daleko już zaszłaś.</p></div>
           <button class="primary-button" id="add-point-button" aria-label="Dodaj punkt na mapie" title="Dodaj punkt na mapie"><svg viewBox="0 0 24 24"><path d="M12 5v14m-7-7h14"/></svg><span>Dodaj punkt</span></button>
         </div>
 
@@ -85,6 +103,16 @@
       <footer class="app-footer"><span>WAYFINDER <i>·</i> TWOJA DROGA, TWOJE TEMPO</span><span>Wszystkie dane pozostają na tym urządzeniu</span></footer>
     </main>
   </div>
+
+  <dialog class="entry-dialog map-dialog" id="map-dialog">
+    <form id="map-form">
+      <div class="dialog-top"><div><span class="detail-kicker">NOWA MAPA</span><h2>Dokąd chcesz dojść?</h2></div><button class="icon-button dialog-close" type="button" data-close-map-dialog aria-label="Zamknij"><svg viewBox="0 0 24 24"><path d="m18 6-12 12M6 6l12 12"/></svg></button></div>
+      <label class="field-label" for="map-name-input">Nazwa Twojej mapy</label><input class="text-input" id="map-name-input" maxlength="54" required placeholder="np. Moja pierwsza wyprawa">
+      <label class="field-label" for="map-category-input">Temat podróży</label><select class="text-input" id="map-category-input"><option value="Rozwój osobisty">Rozwój osobisty</option><option value="Sport">Sport</option><option value="Kariera">Kariera</option><option value="Podróże">Podróże</option><option value="Inne">Inne</option></select>
+      <label class="field-label" for="map-goal-input">Co chcesz osiągnąć?</label><textarea class="text-input text-area" id="map-goal-input" maxlength="180" required placeholder="Opisz swój cel jednym zdaniem"></textarea>
+      <div class="dialog-actions"><button class="secondary-button" type="button" data-close-map-dialog>Anuluj</button><button class="primary-button" type="submit"><svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg><span>Stwórz mapę</span></button></div>
+    </form>
+  </dialog>
 
   <dialog class="entry-dialog" id="entry-dialog">
     <form id="entry-form" method="dialog">
