@@ -374,6 +374,7 @@ h1 em{color:#c6a6f1}
 .detail-action{border:0;border-radius:999px}
 
 @media(max-width:760px){
+  .app-shell.active{display:block;width:100%;min-width:0}
   .welcome-image{object-position:54% center}
   .welcome-wash{background:radial-gradient(ellipse 105% 47% at 48% 51%,rgba(202,145,214,.36),transparent 79%),linear-gradient(180deg,rgba(31,19,44,.1),rgba(83,54,99,.16) 33%,rgba(74,45,88,.27) 55%,rgba(13,12,26,.86) 100%),linear-gradient(0deg,rgba(161,113,181,.3),transparent 61%)}
   .welcome-top{padding:22px 22px}
