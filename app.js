@@ -86,7 +86,7 @@ function renderMap() {
       <text class="node-date" x="${labelX}" y="${labelY + 13}" text-anchor="${anchor}">${escapeHtml(dateLabel.toLocaleUpperCase('pl-PL'))}</text>
     </g>`;
   }).join('');
-  map.innerHTML = `<defs><linearGradient id="mapTint" x1="0" x2="1" y1="1" y2="0"><stop offset="0" stop-color="#dce2d2" stop-opacity=".18"/><stop offset="1" stop-color="#f2ecdb" stop-opacity=".28"/></linearGradient></defs>
+  map.innerHTML = `<defs><linearGradient id="mapTint" x1="0" x2="1" y1="1" y2="0"><stop offset="0" stop-color="#151a34" stop-opacity=".12"/><stop offset="1" stop-color="#3d2c55" stop-opacity=".2"/></linearGradient></defs>
     <rect width="900" height="520" fill="url(#mapTint)" pointer-events="none"/>
     <path class="route-back" d="M${routePoints().replaceAll(' ', ' L')}"/><path class="route-line" d="M${routePoints().replaceAll(' ', ' L')}"/>
     ${donePoints ? `<path class="route-done" d="M${donePoints.replaceAll(' ', ' L')}"/>` : ''}

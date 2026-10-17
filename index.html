@@ -3,13 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f4f1e8">
+  <meta name="theme-color" content="#0b0d1b">
   <meta name="description" content="WAYFINDER — mapa Twojej drogi do celu.">
   <title>WAYFINDER — Twoja droga</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="dreamy.css">
   <script src="app.js" defer></script>
 </head>
 <body>
@@ -39,7 +40,7 @@
       <section class="view active" id="map-view" aria-labelledby="goal-title">
         <div class="page-heading">
           <div><div class="eyebrow"><span class="eyebrow-line"></span> TWOJA MAPA, TWOJE TEMPO</div><h1 id="goal-title">Pierwsze zawody <em>w klasie L</em></h1><p class="heading-subtitle">Każdy trening przybliża Cię do celu. Zobacz, jak daleko już zaszłaś.</p></div>
-          <button class="primary-button" id="add-point-button"><svg viewBox="0 0 24 24"><path d="M12 5v14m-7-7h14"/></svg><span>Dodaj punkt</span></button>
+          <button class="primary-button" id="add-point-button" aria-label="Dodaj punkt na mapie" title="Dodaj punkt na mapie"><svg viewBox="0 0 24 24"><path d="M12 5v14m-7-7h14"/></svg><span>Dodaj punkt</span></button>
         </div>
 
         <div class="overview-strip">
@@ -70,14 +71,14 @@
       </section>
 
       <section class="view journal-view" id="journal-view" aria-labelledby="journal-title">
-        <div class="page-heading journal-heading"><div><div class="eyebrow"><span class="eyebrow-line"></span> MAŁE CHWILE, WIELKA DROGA</div><h1 id="journal-title">Dziennik <em>podróży</em></h1><p class="heading-subtitle">Zapisuj to, co chcesz pamiętać. Każdy wpis jest częścią Twojej historii.</p></div><button class="primary-button" id="journal-add-button"><svg viewBox="0 0 24 24"><path d="M12 5v14m-7-7h14"/></svg><span>Nowy wpis</span></button></div>
+        <div class="page-heading journal-heading"><div><div class="eyebrow"><span class="eyebrow-line"></span> MAŁE CHWILE, WIELKA DROGA</div><h1 id="journal-title">Dziennik <em>podróży</em></h1><p class="heading-subtitle">Zapisuj to, co chcesz pamiętać. Każdy wpis jest częścią Twojej historii.</p></div><button class="primary-button" id="journal-add-button" aria-label="Dodaj wpis do dziennika" title="Dodaj wpis do dziennika"><svg viewBox="0 0 24 24"><path d="M12 5v14m-7-7h14"/></svg><span>Nowy wpis</span></button></div>
         <div class="journal-summary"><div><span class="journal-summary-number" id="journal-total">0</span><span>zapisanych chwil</span></div><div class="journal-summary-rule"></div><p>„To, co dziś wydaje się małe, jutro może być Twoim ulubionym wspomnieniem.”</p></div>
         <div class="journal-filters" role="group" aria-label="Filtruj wpisy"><button class="filter-button active" data-filter="all">Wszystkie <span id="filter-all-count">0</span></button><button class="filter-button" data-filter="activity">Treningi</button><button class="filter-button" data-filter="memory">Wspomnienia</button></div>
         <div class="journal-grid" id="journal-grid"></div>
       </section>
 
       <section class="view memories-view" id="memories-view" aria-labelledby="memories-title">
-        <div class="page-heading"><div><div class="eyebrow"><span class="eyebrow-line"></span> TWOJA HISTORIA</div><h1 id="memories-title">Wspomnienia <em>po drodze</em></h1><p class="heading-subtitle">Chwile, do których warto wrócić.</p></div><button class="primary-button" id="memory-add-button"><svg viewBox="0 0 24 24"><path d="M12 5v14m-7-7h14"/></svg><span>Dodaj wspomnienie</span></button></div>
+        <div class="page-heading"><div><div class="eyebrow"><span class="eyebrow-line"></span> TWOJA HISTORIA</div><h1 id="memories-title">Wspomnienia <em>po drodze</em></h1><p class="heading-subtitle">Chwile, do których warto wrócić.</p></div><button class="primary-button" id="memory-add-button" aria-label="Dodaj wspomnienie" title="Dodaj wspomnienie"><svg viewBox="0 0 24 24"><path d="M12 5v14m-7-7h14"/></svg><span>Dodaj wspomnienie</span></button></div>
         <div class="memory-feature" id="memory-feature"></div>
       </section>
 
